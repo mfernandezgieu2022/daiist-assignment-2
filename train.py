@@ -9,7 +9,9 @@ What this does, start to finish (no manual steps):
      full test set AND on a "clean" test set with leaked images removed.
   5. Compare against two baselines: pretrained COCO zero-shot, and trivial
      (predict nothing / always alert).
-  6. Save the per-image test scores that the cost sweep will use.
+  6. Save the per-image test scores, then cost the errors, sweep the thresholds,
+     design the human-review band and save the chosen operating point
+     (the maths lives in costing.py so the app can reuse it).
 
 Run with: uv run python main.py train
 
@@ -331,16 +333,22 @@ def _summarize_val(m, names: list[str]) -> dict:
     }
 
 
+def _predict_chunks(model, images: list[Path], size: int = 16, **kwargs):
+    """Yield (image_path, result). Predicts a few images at a time: giving ultralytics
+    a long list can put the whole list in ONE batch and run out of GPU memory."""
+    for i in range(0, len(images), size):
+        chunk = images[i:i + size]
+        results = model.predict(source=[str(p) for p in chunk], imgsz=IMGSZ,
+                                verbose=False, device=DEVICE, **kwargs)
+        yield from zip(chunk, results)
+
+
 def image_scores(model, images: list[Path], root: Path, names: list[str],
                  leaky: set, leak_distance: dict) -> list[dict]:
     """Per test image: which classes are really there, and the model's best
     confidence for each class. This is all the cost sweep needs."""
     rows = []
-    results = model.predict(
-        source=[str(p) for p in images], conf=0.001, iou=0.6, imgsz=IMGSZ,
-        max_det=100, stream=True, verbose=False, device=DEVICE,
-    )
-    for img, r in zip(images, results):
+    for img, r in _predict_chunks(model, images, conf=0.001, iou=0.6, max_det=100):
         cls = r.boxes.cls.cpu().numpy().astype(int)
         conf = r.boxes.conf.cpu().numpy()
         scores = {n: round(float(conf[cls == c].max()), 4) if (cls == c).any() else 0.0
@@ -394,8 +402,7 @@ def coco_zero_shot(images: list[Path], names: list[str]) -> dict:
 
     coco = YOLO(MODEL)
     counts = Counter()
-    for r in coco.predict(source=[str(p) for p in images], conf=EVAL_CONF, imgsz=IMGSZ,
-                          stream=True, verbose=False, device=DEVICE):
+    for _, r in _predict_chunks(coco, images, conf=EVAL_CONF):
         for c in r.boxes.cls.int().tolist():
             counts[coco.names[c]] += 1
     wanted = {n.lower() for n in names}
@@ -456,7 +463,10 @@ def main() -> None:
         for n, v in d["detection"]["per_class"].items():
             print(f"  {n}: {v}")
     print("\nbaselines:", json.dumps(metrics["baselines"], indent=2))
-    # NEXT STAGE: cost sweep, review band, chosen operating point.
+
+    # Costing: cost sweep, review band, staffing, chosen operating point.
+    from costing import run_costing
+    run_costing(ARTIFACTS)
 
 
 if __name__ == "__main__":

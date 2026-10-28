@@ -14,3 +14,7 @@ runs/
 
 # Never commit your API key
 .env
+
+weights_smoke/
+artifacts_smoke/
+yolo11*.pt

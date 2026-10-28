@@ -1,0 +1,7 @@
+{
+ "positive_class": "Smoke",
+ "pass_below": 0.03,
+ "fail_at_or_above": 0.53,
+ "single_threshold": 0.53,
+ "basis": "clean test set, expected cost, review share capped by available reviewers"
+}

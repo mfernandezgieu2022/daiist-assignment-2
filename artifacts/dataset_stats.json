@@ -1,0 +1,77 @@
+{
+  "classes": [
+    "Fire",
+    "Smoke"
+  ],
+  "splits": {
+    "train": {
+      "images": 9156,
+      "unique_source_images": 2419,
+      "background_images": 4,
+      "per_class": {
+        "Fire": {
+          "instances": 11505,
+          "images_with_class": 7478,
+          "box_area_median": 0.0471,
+          "box_area_p10": 0.00451,
+          "box_area_p90": 0.43339
+        },
+        "Smoke": {
+          "instances": 4312,
+          "images_with_class": 3189,
+          "box_area_median": 0.27296,
+          "box_area_p10": 0.07389,
+          "box_area_p90": 0.77663
+        }
+      }
+    },
+    "valid": {
+      "images": 872,
+      "unique_source_images": 816,
+      "background_images": 0,
+      "per_class": {
+        "Fire": {
+          "instances": 1137,
+          "images_with_class": 745,
+          "box_area_median": 0.02897,
+          "box_area_p10": 0.00298,
+          "box_area_p90": 0.23654
+        },
+        "Smoke": {
+          "instances": 400,
+          "images_with_class": 274,
+          "box_area_median": 0.1453,
+          "box_area_p10": 0.05131,
+          "box_area_p90": 0.45794
+        }
+      }
+    },
+    "test": {
+      "images": 435,
+      "unique_source_images": 412,
+      "background_images": 0,
+      "per_class": {
+        "Fire": {
+          "instances": 544,
+          "images_with_class": 356,
+          "box_area_median": 0.03318,
+          "box_area_p10": 0.00322,
+          "box_area_p90": 0.24682
+        },
+        "Smoke": {
+          "instances": 216,
+          "images_with_class": 161,
+          "box_area_median": 0.16031,
+          "box_area_p10": 0.05416,
+          "box_area_p90": 0.51645
+        }
+      }
+    }
+  },
+  "leakage_by_filename_and_md5": {
+    "exact_duplicate_images_across_splits": 2,
+    "shared_source_names_train_test": 151,
+    "shared_source_names_train_valid": 290,
+    "shared_source_names_valid_test": 78
+  }
+}

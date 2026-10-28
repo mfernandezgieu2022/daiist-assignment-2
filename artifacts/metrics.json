@@ -1,0 +1,189 @@
+{
+  "model": "yolo11s.pt",
+  "weights": "weights/best.pt",
+  "positive_class": "Smoke",
+  "full_test": {
+    "n_images": 435,
+    "detection": {
+      "overall": {
+        "precision": 0.7993,
+        "recall": 0.7312,
+        "ap50": 0.7808,
+        "map50_95": 0.4617
+      },
+      "per_class": {
+        "Fire": {
+          "precision": 0.8258,
+          "recall": 0.8165,
+          "ap50": 0.8516,
+          "map50_95": 0.5104
+        },
+        "Smoke": {
+          "precision": 0.7728,
+          "recall": 0.6458,
+          "ap50": 0.71,
+          "map50_95": 0.413
+        }
+      }
+    },
+    "confusion_matrix": {
+      "conf": 0.25,
+      "labels": [
+        "Fire",
+        "Smoke",
+        "background"
+      ],
+      "matrix": [
+        [
+          445,
+          9,
+          92
+        ],
+        [
+          4,
+          147,
+          36
+        ],
+        [
+          85,
+          60,
+          0
+        ]
+      ]
+    },
+    "image_level": {
+      "threshold": 0.25,
+      "tp": 129,
+      "fp": 10,
+      "fn": 32,
+      "tn": 264,
+      "precision": 0.9281,
+      "recall": 0.8012
+    }
+  },
+  "clean_test": {
+    "n_images": 141,
+    "detection": {
+      "overall": {
+        "precision": 0.7875,
+        "recall": 0.6439,
+        "ap50": 0.7104,
+        "map50_95": 0.3823
+      },
+      "per_class": {
+        "Fire": {
+          "precision": 0.7089,
+          "recall": 0.664,
+          "ap50": 0.6904,
+          "map50_95": 0.3797
+        },
+        "Smoke": {
+          "precision": 0.8662,
+          "recall": 0.6239,
+          "ap50": 0.7304,
+          "map50_95": 0.3849
+        }
+      }
+    },
+    "confusion_matrix": {
+      "conf": 0.25,
+      "labels": [
+        "Fire",
+        "Smoke",
+        "background"
+      ],
+      "matrix": [
+        [
+          70,
+          2,
+          34
+        ],
+        [
+          0,
+          72,
+          13
+        ],
+        [
+          29,
+          35,
+          0
+        ]
+      ]
+    },
+    "image_level": {
+      "threshold": 0.25,
+      "tp": 75,
+      "fp": 3,
+      "fn": 16,
+      "tn": 47,
+      "precision": 0.9615,
+      "recall": 0.8242
+    }
+  },
+  "baselines": {
+    "coco_zero_shot": {
+      "coco_classes_matching_target_names": [],
+      "detections_by_coco_class_top10": [
+        [
+          "person",
+          128
+        ],
+        [
+          "cell phone",
+          53
+        ],
+        [
+          "car",
+          27
+        ],
+        [
+          "boat",
+          14
+        ],
+        [
+          "truck",
+          14
+        ],
+        [
+          "train",
+          12
+        ],
+        [
+          "refrigerator",
+          7
+        ],
+        [
+          "cat",
+          7
+        ],
+        [
+          "bus",
+          6
+        ],
+        [
+          "oven",
+          5
+        ]
+      ],
+      "result": "ap50 = 0 and recall = 0 by construction: no COCO class maps to the target classes"
+    },
+    "predict_nothing": {
+      "threshold": 1.01,
+      "tp": 0,
+      "fp": 0,
+      "fn": 161,
+      "tn": 274,
+      "precision": null,
+      "recall": 0.0
+    },
+    "always_alert": {
+      "threshold": 0.0,
+      "tp": 161,
+      "fp": 274,
+      "fn": 0,
+      "tn": 0,
+      "precision": 0.3701,
+      "recall": 1.0
+    }
+  }
+}
